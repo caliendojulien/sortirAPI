@@ -2,13 +2,24 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use App\Controller\MoiController;
 use App\Repository\StagiaireRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 
+#[ApiResource]
+#[Get(
+    uriTemplate: '/moi',
+    controller: MoiController::class,
+    validationContext: ['groups' => ['read:moi']],
+    name: 'moi'
+)]
 #[ORM\Entity(repositoryClass: StagiaireRepository::class)]
 class Stagiaire implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -18,14 +29,12 @@ class Stagiaire implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
+    #[Groups(['read:moi'])]
     private ?string $email = null;
 
     #[ORM\Column]
     private array $roles = [];
 
-    /**
-     * @var string The hashed password
-     */
     #[ORM\Column]
     private ?string $password = null;
 
@@ -81,7 +90,7 @@ class Stagiaire implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getUserIdentifier(): string
     {
-        return (string) $this->email;
+        return (string)$this->email;
     }
 
     /**
