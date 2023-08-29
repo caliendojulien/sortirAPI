@@ -14,12 +14,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ApiResource]
-#[Get(
-    uriTemplate: '/moi',
-    controller: MoiController::class,
-    validationContext: ['groups' => ['read:moi']],
-    name: 'moi'
-)]
+#[Get]
 #[ORM\Entity(repositoryClass: StagiaireRepository::class)]
 class Stagiaire implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -29,7 +24,6 @@ class Stagiaire implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
-    #[Groups(['read:moi'])]
     private ?string $email = null;
 
     #[ORM\Column]
@@ -39,9 +33,11 @@ class Stagiaire implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['sortie'])]
     private ?string $nom = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['sortie'])]
     private ?string $prenom = null;
 
     #[ORM\Column]

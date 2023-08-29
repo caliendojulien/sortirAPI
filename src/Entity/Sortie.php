@@ -3,44 +3,60 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
 use App\Repository\SortieRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: SortieRepository::class)]
 #[ApiResource]
+#[GetCollection(
+    normalizationContext: ['groups' => ['sortie']]
+)]
+#[Get]
 class Sortie
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['sortie'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['sortie'])]
     private ?string $nom = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Groups(['sortie'])]
     private ?\DateTimeInterface $debut = null;
 
     #[ORM\Column]
+    #[Groups(['sortie'])]
     private ?int $duree = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Groups(['sortie'])]
     private ?\DateTimeInterface $limiteInscription = null;
 
     #[ORM\Column]
+    #[Groups(['sortie'])]
     private ?int $participantsMax = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Groups(['sortie'])]
     private ?string $informations = null;
 
     #[ORM\ManyToOne(inversedBy: 'sortiesOrganisees')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['sortie'])]
     private ?Stagiaire $organisateur = null;
 
     #[ORM\ManyToMany(targetEntity: Stagiaire::class, inversedBy: 'sorties')]
+    #[Groups(['sortie'])]
     private Collection $participants;
 
     public function __construct()
